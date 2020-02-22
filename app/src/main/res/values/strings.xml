@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">adobe-exp-batch-status-android</string>
+
+    <string name="request_adobe_info_disclaimer">To retrieve your batch upload information, we require certain pieces of data that you can get from the</string>
+    <string name="adobe_website">Adobe Website</string>
+    <string name="client_id">Client ID</string>
+    <string name="client_secret">Client Secret</string>
+    <string name="organization_id">Organization ID</string>
+    <string name="technical_account_id">Technical Account ID</string>
+    <string name="login">Login</string>
+    <string name="legal_no_affiliation_disclaimer">This application is in no way affiliated with Adobe Inc.</string>
+</resources>
