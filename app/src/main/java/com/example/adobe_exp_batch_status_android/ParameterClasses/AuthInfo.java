@@ -3,6 +3,7 @@ package com.example.adobe_exp_batch_status_android.ParameterClasses;
 import com.google.gson.annotations.*;
 
 public class AuthInfo {
+
     protected String username;
     protected String password;
     @SerializedName("secret")

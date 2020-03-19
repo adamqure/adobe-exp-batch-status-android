@@ -1,4 +1,4 @@
-package com.example.adobe_exp_batch_status_android
+package com.example.adobe_exp_batch_status_android.Login
 
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.adobe_exp_batch_status_android.R
 
 
 class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
@@ -38,7 +39,8 @@ class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
         organizationIdEditText = view.findViewById(R.id.organization_id_edit_text)
         technicalAccountIdEditText = view.findViewById(R.id.technical_account_id_edit_text)
         loginButton = view.findViewById(R.id.login_button)
-        presenter = LoginPresenter(this)
+        presenter =
+            LoginPresenter(this)
 
         initializeWebsiteButton()
         initializeLoginButton()

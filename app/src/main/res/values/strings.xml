@@ -9,4 +9,16 @@
     <string name="technical_account_id">Technical Account ID</string>
     <string name="login">Login</string>
     <string name="legal_no_affiliation_disclaimer">This application is in no way affiliated with Adobe Inc.</string>
+    <string name="datasets">Datasets</string>
+    <string name="logout">Logout</string>
+    <string name="search">Search</string>
+    <string name="back">back</string>
+    <string name="upload_metrics">Upload Metrics</string>
+    <string name="files_successful">Files Successful</string>
+    <string name="files_failed">Files Failed</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="total_errors">Total Errors</string>
+    <string name="errors">Errors</string>
+    <string name="no_errors_message">You Have No Errors!</string>
 </resources>

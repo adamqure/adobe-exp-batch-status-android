@@ -1,5 +1,7 @@
-package com.example.adobe_exp_batch_status_android
+package com.example.adobe_exp_batch_status_android.Login
 
+import com.example.adobe_exp_batch_status_android.API
+import com.example.adobe_exp_batch_status_android.Authentication
 import com.example.adobe_exp_batch_status_android.ParameterClasses.AuthInfo
 import com.example.adobe_exp_batch_status_android.ParameterClasses.AuthToken
 import com.google.gson.Gson
@@ -101,6 +103,7 @@ class LoginModel(var presenterCallback: LoginContract.LoginPresenterInterface) :
                 authInfo.addAuthToken(response.body())
                 presenterCallback.loginSuccessful()
                 println("EXCHANGED JWT: " + authInfo.accessToken)
+                Authentication.authInfo = authInfo
             }
 
             override fun onFailure(call: Call<AuthToken?>?, t: Throwable?) {

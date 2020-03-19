@@ -1,4 +1,4 @@
-package com.example.adobe_exp_batch_status_android
+package com.example.adobe_exp_batch_status_android.Login
 
 class LoginContract {
     interface LoginPresenterInterface {

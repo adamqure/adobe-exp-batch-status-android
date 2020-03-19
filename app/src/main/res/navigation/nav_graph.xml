@@ -7,7 +7,23 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.adobe_exp_batch_status_android.LoginFragment"
+        android:name="com.example.adobe_exp_batch_status_android.Login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_datasetsFragment"
+            app:destination="@id/datasetsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/batchesListFragment"
+        android:name="com.example.adobe_exp_batch_status_android.BatchesList.BatchesListFragment"
+        android:label="BatchesListFragment" />
+    <fragment
+        android:id="@+id/datasetsFragment"
+        android:name="com.example.adobe_exp_batch_status_android.Datasets.DatasetsFragment"
+        android:label="DatasetsFragment" >
+        <action
+            android:id="@+id/action_datasetsFragment_to_batchesListFragment"
+            app:destination="@id/batchesListFragment" />
+    </fragment>
 </navigation>
