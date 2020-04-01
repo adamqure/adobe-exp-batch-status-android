@@ -30,13 +30,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/batches_back_button"
+            android:id="@+id/batch_details_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:style="?android:attr/borderlessButtonStyle"
+            android:buttonStyle="?android:attr/borderlessButtonStyle"
             android:text="@string/back"
             android:textColor="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -82,6 +82,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                app:cardCornerRadius="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

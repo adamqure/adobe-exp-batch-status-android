@@ -1,6 +1,8 @@
 package com.example.adobe_exp_batch_status_android.Login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +13,17 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.adobe_exp_batch_status_android.R
 
 
 class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
+
+    val CLIENT_ID = "client_id"
+    val CLIENT_SECRET = "client_secret"
+    val ORG_ID = "org_id"
+    val SUB = "sub"
+
     lateinit var adobeWebsiteLink: TextView
     lateinit var clientIdEditText: EditText
     lateinit var clientSecretEditText: EditText
@@ -22,6 +31,7 @@ class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
     lateinit var technicalAccountIdEditText: EditText
     lateinit var loginButton: Button
     lateinit var presenter: LoginContract.LoginPresenterInterface
+    lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreateView(
@@ -41,6 +51,28 @@ class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
         loginButton = view.findViewById(R.id.login_button)
         presenter =
             LoginPresenter(this)
+
+        sharedPreferences = activity!!.getSharedPreferences("aep_shared_preferences", Context.MODE_PRIVATE)
+        val clientId = sharedPreferences.getString(CLIENT_ID, "")
+        val clientSecret = sharedPreferences.getString(CLIENT_SECRET, "")
+        val orgId = sharedPreferences.getString(ORG_ID, "")
+        val techId = sharedPreferences.getString(SUB, "")
+
+        if (!clientId.isNullOrEmpty()) {
+            clientIdEditText.setText(clientId)
+        }
+
+        if (!clientSecret.isNullOrEmpty()) {
+            clientSecretEditText.setText(clientSecret)
+        }
+
+        if (!orgId.isNullOrEmpty()) {
+            organizationIdEditText.setText(orgId)
+        }
+
+        if (!techId.isNullOrEmpty()) {
+            technicalAccountIdEditText.setText(techId)
+        }
 
         initializeWebsiteButton()
         initializeLoginButton()
@@ -63,19 +95,27 @@ class LoginFragment : Fragment(), LoginContract.LoginFragmentInterface {
             val clientSecret = clientSecretEditText.text.toString()
             val orgId = organizationIdEditText.text.toString()
             val techAccountId = technicalAccountIdEditText.text.toString()
+            val secret = resources.getString(R.string.secret)
+            val apiKey = resources.getString(R.string.api_key)
 
-            presenter.login(clientId, clientSecret, orgId, techAccountId)
+            presenter.login(clientId, clientSecret, orgId, techAccountId, secret, apiKey)
         }
     }
 
     override fun loginSuccessful() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+        print("login successful")
+        sharedPreferences.edit().apply {
+            putString(CLIENT_ID, clientIdEditText.text.toString())
+            putString(CLIENT_SECRET, clientSecretEditText.text.toString())
+            putString(ORG_ID, organizationIdEditText.text.toString())
+            putString(SUB, technicalAccountIdEditText.text.toString())
+        }.apply()
+
+//        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_loginFragment_to_datasetsFragment)
     }
 
     override fun loginFailed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
-
     }
 }

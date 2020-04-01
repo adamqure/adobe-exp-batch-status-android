@@ -34,7 +34,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:style="?android:attr/borderlessButtonStyle"
+            android:buttonStyle="?android:attr/borderlessButtonStyle"
             android:text="@string/back"
             android:textColor="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"

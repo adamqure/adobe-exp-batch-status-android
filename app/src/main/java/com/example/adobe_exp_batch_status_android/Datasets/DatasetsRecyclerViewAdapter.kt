@@ -27,7 +27,9 @@ class DatasetsRecyclerViewAdapter(var datasets: List<Dataset>, var callback: Dat
         return datasets.size
     }
 
-
+    public fun swapItems(datasets: List<Dataset>) {
+        this.datasets = datasets
+    }
 
     //the class is hodling the list view
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

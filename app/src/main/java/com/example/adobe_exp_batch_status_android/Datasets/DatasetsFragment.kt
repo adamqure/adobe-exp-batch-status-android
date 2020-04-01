@@ -9,8 +9,10 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.adobe_exp_batch_status_android.BatchesList.BatchesListFragmentArgs
 import com.example.adobe_exp_batch_status_android.Objects.Dataset
 import com.example.adobe_exp_batch_status_android.R
 
@@ -46,12 +48,19 @@ class DatasetsFragment : Fragment(), DatasetsContract.DatasetFragmentInterface {
         presenter = DatasetPresenter(this)
         presenter.retrieveDatasets()
 
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
+        datasetsRecyclerView.layoutManager = linearLayoutManager
+        val adapter = DatasetsRecyclerViewAdapter(filteredDatasetList, this)
+        datasetsRecyclerView.adapter = adapter
+
         this.initializeSearchBar()
         this.initializeLogoutButton()
-        this.initializeRecyclerView()
     }
 
     fun initializeSearchBar() {
+        searchBar.onActionViewExpanded()
+        searchBar.clearFocus()
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
@@ -59,6 +68,9 @@ class DatasetsFragment : Fragment(), DatasetsContract.DatasetFragmentInterface {
                     it.id.toLowerCase().contains(newText.toLowerCase()) ||
                             it.name.toLowerCase().contains(newText.toLowerCase())
                 }
+
+                val adapter = datasetsRecyclerView.adapter as DatasetsRecyclerViewAdapter
+                adapter.swapItems(filteredDatasetList)
 
                 datasetsRecyclerView.adapter?.notifyDataSetChanged()
                 return false
@@ -71,27 +83,26 @@ class DatasetsFragment : Fragment(), DatasetsContract.DatasetFragmentInterface {
         })
     }
 
-    fun initializeRecyclerView() {
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        datasetsRecyclerView.layoutManager = linearLayoutManager
-        val adapter = DatasetsRecyclerViewAdapter(filteredDatasetList, this)
-        datasetsRecyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
-    }
-
     fun initializeLogoutButton() {
-
+        logoutButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun datasetSelected(dataset: Dataset) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val action = DatasetsFragmentDirections.actionDatasetsFragmentToBatchesListFragment(dataset.id, dataset.name)
+        findNavController().navigate(action)
     }
 
     override fun updateDatasets(datasets: ArrayList<Dataset>) {
-        this.datasetList = datasets
-        this.filteredDatasetList = datasets
+        activity?.runOnUiThread {
+            datasetList = datasets
+            filteredDatasetList = datasets
+            val adapter = datasetsRecyclerView.adapter as DatasetsRecyclerViewAdapter
+            adapter.swapItems(filteredDatasetList)
 
-        datasetsRecyclerView.adapter?.notifyDataSetChanged()
+            datasetsRecyclerView.adapter?.notifyDataSetChanged()
+        }
+
     }
 }

@@ -7,31 +7,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.adobe_exp_batch_status_android.Objects.Batch
+import com.example.adobe_exp_batch_status_android.Objects.Dataset
 import com.example.adobe_exp_batch_status_android.R
 import kotlinx.android.synthetic.main.item_batch_list.view.*
+import java.time.Instant
 
 import java.util.*
 
 
-class BatchesListRecyclerViewAdapter(var datasets: List<Batch>, var callback: BatchesListContract.BatchesListFragmentInterface) : RecyclerView.Adapter<BatchesListRecyclerViewAdapter.ViewHolder>()  {
+class BatchesListRecyclerViewAdapter(var batches: List<Batch>, var callback: BatchesListContract.BatchesListFragmentInterface) : RecyclerView.Adapter<BatchesListRecyclerViewAdapter.ViewHolder>()  {
 
     //this method is returning the view for each item in the list
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BatchesListRecyclerViewAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_datasets, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_batch_list, parent, false)
         return ViewHolder(v)
     }
 
     //this method is binding the data on the list
     override fun onBindViewHolder(holder: BatchesListRecyclerViewAdapter.ViewHolder, position: Int) {
-        holder.bindItems(datasets[position], callback)
+        holder.bindItems(batches[position], callback)
     }
 
     //this method is giving the size of the list
     override fun getItemCount(): Int {
-        return datasets.size
+        return batches.size
     }
 
-
+    fun swapItems(batches: List<Batch>) {
+        this.batches = batches
+    }
 
     //the class is hodling the list view
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,7 +43,6 @@ class BatchesListRecyclerViewAdapter(var datasets: List<Batch>, var callback: Ba
         fun bindItems(batch: Batch, callback: BatchesListContract.BatchesListFragmentInterface) {
             itemView.batch_id_text_view.text = batch.id
             itemView.batch_updated_text_view.text = getUpdatedTime(batch.lastUpdated)
-            itemView.batch_status_icon.radius = (itemView.batch_status_icon.width / 2).toFloat()
 
             when(batch.status) {
                 "success" -> {
@@ -65,9 +68,9 @@ class BatchesListRecyclerViewAdapter(var datasets: List<Batch>, var callback: Ba
             }
         }
 
-        fun getUpdatedTime(unixTimestamp: Int): String {
-            val currentCalendar = Calendar.getInstance()
-            val currentTime = currentCalendar.timeInMillis
+        fun getUpdatedTime(unixTimestamp: Long): String {
+//            val currentCalendar = Calendar.getInstance()
+            val currentTime = Instant.now().toEpochMilli();
 
             val difference = currentTime - unixTimestamp
 

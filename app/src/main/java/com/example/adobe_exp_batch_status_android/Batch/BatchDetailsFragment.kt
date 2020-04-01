@@ -1,6 +1,7 @@
 package com.example.adobe_exp_batch_status_android.Batch
 
 import android.graphics.Color
+import android.icu.text.DateFormat
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,15 +11,19 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.adobe_exp_batch_status_android.Objects.BatchDetails
 import com.example.adobe_exp_batch_status_android.Objects.BatchError
 import com.example.adobe_exp_batch_status_android.R
 import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
-class BatchesListFragment : Fragment(), BatchDetailsContract.BatchDetailsFragmentInterface {
+class BatchDetailsFragment : Fragment(), BatchDetailsContract.BatchDetailsFragmentInterface {
 
     var batchId = ""
     var batch = BatchDetails(0, 0, "", 0, 0, ArrayList<BatchError>())
@@ -54,15 +59,17 @@ class BatchesListFragment : Fragment(), BatchDetailsContract.BatchDetailsFragmen
         startTimeLabel = view.findViewById(R.id.start_time_text_view)
         endTimeLabel = view.findViewById(R.id.end_time_text_view)
         errorCountLabel = view.findViewById(R.id.total_errors_text_view)
-        statusLabel = view.findViewById(R.id.batch_status_label)
-        statusIcon = view.findViewById(R.id.batch_status_icon)
+        statusLabel = view.findViewById(R.id.batch_details_status_label)
+        statusIcon = view.findViewById(R.id.batch_details_status_icon)
         errorRecyclerView = view.findViewById(R.id.errors_recycler_view)
         noErrorsView = view.findViewById(R.id.no_errors_text_view)
+        backButton = view.findViewById(R.id.batch_details_back_button)
+
+        batchId = BatchDetailsFragmentArgs.fromBundle(arguments!!).batchId
 
         super.onViewCreated(view, savedInstanceState)
 
         title.text = batchId
-        statusIcon.radius = (statusIcon.width / 2).toFloat()
 
         presenter = BatchDetailsPresenter(this)
         presenter.retrieveBatch(batchId)
@@ -73,7 +80,7 @@ class BatchesListFragment : Fragment(), BatchDetailsContract.BatchDetailsFragmen
 
     fun initializeBackButton() {
         this.backButton.setOnClickListener {
-
+            findNavController().popBackStack()
         }
     }
 
@@ -112,13 +119,16 @@ class BatchesListFragment : Fragment(), BatchDetailsContract.BatchDetailsFragmen
         successfulLabel.text = batch.successfulCount.toString()
         failedLabel.text = batch.failedCount.toString()
         if (batch.startedTime != null) {
-            startTimeLabel.text = DateTimeFormatter.ISO_INSTANT
-                .format(Instant.ofEpochSecond(batch.startedTime!!.toLong()))
+            val localDate = Instant.ofEpochMilli(batch.startedTime!!).atZone(ZoneId.systemDefault()).toLocalDateTime()
+            val format = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")
+            startTimeLabel.text = localDate.format(format)
         } else {
             startTimeLabel.text = "--"
         }
         if (batch.endedTime != null) {
-            endTimeLabel.text = DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochSecond(batch.endedTime!!.toLong()))
+            val localDate = Instant.ofEpochMilli(batch.endedTime!!).atZone(ZoneId.systemDefault()).toLocalDateTime()
+            val format = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")
+            endTimeLabel.text = localDate.format(format)
         } else {
             endTimeLabel.text = "--"
         }

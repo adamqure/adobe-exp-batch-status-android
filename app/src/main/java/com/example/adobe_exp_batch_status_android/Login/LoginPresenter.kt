@@ -12,9 +12,11 @@ class LoginPresenter(var fragmentCallback: LoginContract.LoginFragmentInterface)
         clientId: String,
         clientSecret: String,
         orgId: String,
-        techAccountId: String
+        techAccountId: String,
+        secret: String,
+        apiKey: String
     ) {
-        loginModel.login(clientId, clientSecret, orgId, techAccountId)
+        loginModel.login(clientId, clientSecret, orgId, techAccountId, secret, apiKey)
     }
 
     override fun loginSuccessful() {

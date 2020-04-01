@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">adobe-exp-batch-status-android</string>
+    <string name="app_name">AEP Status</string>
 
     <string name="request_adobe_info_disclaimer">To retrieve your batch upload information, we require certain pieces of data that you can get from the</string>
     <string name="adobe_website">Adobe Website</string>

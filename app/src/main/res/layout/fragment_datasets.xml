@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/batch_title"
+            android:id="@+id/datasets_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -28,13 +28,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/batches_back_button"
+            android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:style="?android:attr/borderlessButtonStyle"
+            android:buttonStyle="?android:attr/borderlessButtonStyle"
             android:text="@string/logout"
             android:textColor="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <SearchView
-        android:id="@+id/batches_search_view"
+        android:id="@+id/datasets_search_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="@string/search"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/batches_recycler_view"
+        android:id="@+id/datasets_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

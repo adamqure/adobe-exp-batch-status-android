@@ -37,6 +37,14 @@ public class AuthInfo {
         this.jwt = jwt;
     }
 
+    public void setRsaKey(String rsaKey) {
+        this.rsaKey = rsaKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     public void addAuthToken(AuthToken token) {
         this.accessToken = token;
     }

@@ -1,11 +1,11 @@
 package com.example.adobe_exp_batch_status_android.Objects
 
 class BatchDetails(
-    var startedTime: Int?,
-    var endedTime: Int?,
+    var startedTime: Long?,
+    var endedTime: Long?,
     var status: String,
-    var successfulCount: Int?,
-    var failedCount: Int?,
+    var successfulCount: Long?,
+    var failedCount: Long?,
     var errors: List<BatchError>
 ) {
 }

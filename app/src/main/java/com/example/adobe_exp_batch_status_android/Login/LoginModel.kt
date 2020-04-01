@@ -30,17 +30,13 @@ class LoginModel(var presenterCallback: LoginContract.LoginPresenterInterface) :
         clientId: String,
         clientSecret: String,
         orgId: String,
-        techAccountId: String
+        techAccountId: String,
+        secret: String,
+        apiKey: String
     ) {
-        val deserializer = Gson()
-        val config = File("config.json")
-        try {
-            val text: String = Scanner(config).useDelimiter("\\A").next()
-            authInfo = deserializer.fromJson<AuthInfo>(text, AuthInfo::class.java)
-            authInfo.addAuthToken(AuthToken())
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        authInfo = AuthInfo(orgId, clientSecret, "")
+        authInfo.rsaKey = secret
+        authInfo.apiKey = apiKey
         createJwt(clientId, clientSecret, orgId, techAccountId)
     }
 
@@ -50,7 +46,7 @@ class LoginModel(var presenterCallback: LoginContract.LoginPresenterInterface) :
         val bytes: ByteArray
         var privKey: RSAPrivateKey? = null
         try {
-            var keyString: String = authInfo.getRsaKey()
+            var keyString: String = authInfo.rsaKey
             keyString = keyString.replace("\\s+", "")
             keyString = keyString.replace("\n", "")
             keyString = keyString.replace("-----BEGIN PRIVATE KEY-----", "")
@@ -93,17 +89,18 @@ class LoginModel(var presenterCallback: LoginContract.LoginPresenterInterface) :
     }
 
     fun exchangeJwtAuth(clientId: String) {
-        val call: Call<AuthToken> = API.getAuthService()
+        authInfo.addAuthToken(AuthToken())
+        val call = API.getAuthService()
             .getAuthToken(authInfo.apiKey, authInfo.clientSecret, authInfo.jwt)
-        call.enqueue(object : Callback<AuthToken?> {
+        call!!.enqueue(object : Callback<AuthToken?> {
             override fun onResponse(
                 call: Call<AuthToken?>?,
                 response: Response<AuthToken?>
             ) {
                 authInfo.addAuthToken(response.body())
+                Authentication.authInfo = authInfo
                 presenterCallback.loginSuccessful()
                 println("EXCHANGED JWT: " + authInfo.accessToken)
-                Authentication.authInfo = authInfo
             }
 
             override fun onFailure(call: Call<AuthToken?>?, t: Throwable?) {
@@ -111,13 +108,6 @@ class LoginModel(var presenterCallback: LoginContract.LoginPresenterInterface) :
                 presenterCallback.loginFailed()
             }
         })
-        while (authInfo.accessToken == "") {
-            try {
-                Thread.sleep(1000)
-            } catch (e: InterruptedException) {
-                Thread.currentThread().interrupt()
-            }
-        }
     }
 
 }

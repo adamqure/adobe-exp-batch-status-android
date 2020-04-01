@@ -17,7 +17,19 @@
     <fragment
         android:id="@+id/batchesListFragment"
         android:name="com.example.adobe_exp_batch_status_android.BatchesList.BatchesListFragment"
-        android:label="BatchesListFragment" />
+        android:label="BatchesListFragment" >
+        <argument
+            android:name="datasetId"
+            app:argType="string"
+            android:defaultValue='""' />
+        <argument
+            android:name="datasetName"
+            app:argType="string"
+            android:defaultValue='""' />
+        <action
+            android:id="@+id/action_batchesListFragment_to_batchDetailsFragment"
+            app:destination="@id/batchDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/datasetsFragment"
         android:name="com.example.adobe_exp_batch_status_android.Datasets.DatasetsFragment"
@@ -25,5 +37,13 @@
         <action
             android:id="@+id/action_datasetsFragment_to_batchesListFragment"
             app:destination="@id/batchesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/batchDetailsFragment"
+        android:name="com.example.adobe_exp_batch_status_android.Batch.BatchDetailsFragment"
+        android:label="BatchDetailsFragment" >
+        <argument
+            android:name="batchId"
+            app:argType="string" />
     </fragment>
 </navigation>

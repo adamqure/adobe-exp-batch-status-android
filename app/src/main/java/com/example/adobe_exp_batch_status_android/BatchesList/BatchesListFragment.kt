@@ -9,8 +9,10 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.adobe_exp_batch_status_android.Datasets.DatasetsFragmentDirections
 import com.example.adobe_exp_batch_status_android.Objects.Batch
 import com.example.adobe_exp_batch_status_android.Objects.Dataset
 import com.example.adobe_exp_batch_status_android.R
@@ -26,6 +28,7 @@ class BatchesListFragment : Fragment(), BatchesListContract.BatchesListFragmentI
     lateinit var filteredBatchList: List<Batch>
     lateinit var presenter: BatchesListContract.BatchesListPresenterInterface
     var datasetId = ""
+    var datasetName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +44,13 @@ class BatchesListFragment : Fragment(), BatchesListContract.BatchesListFragmentI
         this.searchBar = view.findViewById(R.id.batches_search_view)
         this.batchListRecyclerView = view.findViewById(R.id.batches_recycler_view)
 
+        datasetId = BatchesListFragmentArgs.fromBundle(arguments!!).datasetId
+        datasetName = BatchesListFragmentArgs.fromBundle(arguments!!).datasetName
+
         super.onViewCreated(view, savedInstanceState)
         batchList = ArrayList<Batch>()
         filteredBatchList = ArrayList<Batch>()
-        title.text = datasetId
+        title.text = datasetName
 
         presenter = BatchesListPresenter(this)
         presenter.retrieveBatches(datasetId)
@@ -55,12 +61,17 @@ class BatchesListFragment : Fragment(), BatchesListContract.BatchesListFragmentI
     }
 
     fun initializeSearchBar() {
+        searchBar.onActionViewExpanded()
+        searchBar.clearFocus()
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 filteredBatchList = batchList.filter {
                     it.id.toLowerCase().contains(newText.toLowerCase())
                 }
+
+                val adapter = batchListRecyclerView.adapter as BatchesListRecyclerViewAdapter
+                adapter.swapItems(filteredBatchList)
 
                 batchListRecyclerView.adapter?.notifyDataSetChanged()
                 return false
@@ -75,7 +86,7 @@ class BatchesListFragment : Fragment(), BatchesListContract.BatchesListFragmentI
 
     fun initializeBackButton() {
         this.backButton.setOnClickListener {
-
+            findNavController().popBackStack()
         }
     }
 
@@ -92,9 +103,14 @@ class BatchesListFragment : Fragment(), BatchesListContract.BatchesListFragmentI
         this.batchList = batches
         this.filteredBatchList = batches
 
-        batchListRecyclerView.adapter?.notifyDataSetChanged()    }
+        val adapter = batchListRecyclerView.adapter as BatchesListRecyclerViewAdapter
+        adapter.swapItems(filteredBatchList)
+
+        batchListRecyclerView.adapter?.notifyDataSetChanged()
+    }
 
     override fun batchSelected(batch: Batch) {
-        //
+        val action = BatchesListFragmentDirections.actionBatchesListFragmentToBatchDetailsFragment(batch.id)
+        findNavController().navigate(action)
     }
 }
